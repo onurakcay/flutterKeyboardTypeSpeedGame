@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -40,7 +41,7 @@ class _MyAppHomeState extends State<MyAppHome> {
   void resetGame() {
     setState(() {
       typedChars = 0;
-      step = 0;
+      step = 1;
     });
   }
 
@@ -72,13 +73,18 @@ class _MyAppHomeState extends State<MyAppHome> {
       int now = DateTime.now().millisecondsSinceEpoch;
 
       //Game over
-      if (step == 1 && now - lastTypedAt > 4000) {
-        step++;
-      }
+      setState(() async {
+        if (step == 1 && now - lastTypedAt > 4000) {
+          step++;
+        }
 
-      if (step != 1) {
-        timer.cancel();
-      }
+        if (step != 1) {
+          timer.cancel();
+          var response = await http.post(
+              "https://klavye-delikanlisi.herokuapp.com/users/score",
+              body: {'userName': username, 'score': typedChars.toString()});
+        }
+      });
     });
   }
 

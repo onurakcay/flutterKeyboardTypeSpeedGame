@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter            
   english_words: ^3.1.5  
   marquee: ^1.6.0
+  http: ^0.12.2
 
 
   # The following adds the Cupertino Icons font to your application.
